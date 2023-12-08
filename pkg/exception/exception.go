@@ -3,11 +3,12 @@ package exception
 import (
 	"context"
 	"fmt"
+	"github.com/DeloitteOptimalReality/logxcept/internal/trace"
+	"github.com/DeloitteOptimalReality/logxcept/pkg/logger/impl/middleware"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"math/rand"
 )
 
 type Exception interface {
@@ -24,16 +25,6 @@ type Exception interface {
 var traceIDField = "traceID"
 var resolverTraceIDField = "resolverTraceID"
 
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-func RandStringBytes(n int) string {
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = letterBytes[rand.Intn(len(letterBytes))]
-	}
-	return string(b)
-}
-
 type BaseException struct {
 	err     error
 	msg     string
@@ -48,7 +39,7 @@ func NewBaseException(err error, msg string, path ast.Path, source string) *Base
 		msg:     msg,
 		path:    path,
 		source:  source,
-		traceID: RandStringBytes(16),
+		traceID: trace.RandStringBytes(16),
 	}
 }
 
@@ -73,6 +64,7 @@ func (be *BaseException) Source() string {
 }
 
 func (be *BaseException) Log(ctx context.Context) {
+
 	var logger *zap.Logger
 
 	l := ctx.Value("logger")
@@ -81,12 +73,12 @@ func (be *BaseException) Log(ctx context.Context) {
 	}
 	logger = l.(*zap.Logger)
 
-	resolverTrace := ctx.Value("resolverTrace").(string)
+	resolverTrace := ctx.Value(middleware.RequestLevelTrace).(string)
 
 	// Include trace ID in the log
 	fields := []zapcore.Field{
 		zap.String(traceIDField, be.traceID),
-		zap.String("resolverTrace", resolverTrace),
+		zap.String(resolverTraceIDField, resolverTrace),
 	}
 
 	logger.With(fields...).Info(fmt.Sprintf("%s: %s", be.Msg(), be.err.Error()))
@@ -123,7 +115,7 @@ func (be *BaseException) GqlErrorWithTrace(ctx context.Context) *gqlerror.Error 
 func traceFromCtx(ctx context.Context) string {
 	resolverTrace := ""
 
-	r := ctx.Value("resolverTrace")
+	r := ctx.Value(middleware.RequestLevelTrace)
 	if r == nil {
 		return resolverTrace
 	}

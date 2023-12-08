@@ -7,6 +7,6 @@ import (
 
 // Global setup and teardown
 func TestMain(m *testing.M) {
-
-	os.Exit()
+	code := m.Run()
+	os.Exit(code)
 }

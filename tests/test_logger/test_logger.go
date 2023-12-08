@@ -7,5 +7,8 @@ import (
 
 func TestLoggerInit(t testing.T) {
 	zl := logger.NewLogger()
+	if zl == nil {
+		t.Fail()
+	}
 
 }

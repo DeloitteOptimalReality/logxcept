@@ -5,6 +5,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+type ORLogger struct {
+	zap.Logger
+}
+
 func NewLoggerWithTrace(trace string) *zap.Logger {
 	logger := NewLogger()
 	l := logger.With(zapcore.Field{Key: "requestTrace", Type: zapcore.StringType, String: trace})
