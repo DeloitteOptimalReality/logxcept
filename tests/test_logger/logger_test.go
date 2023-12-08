@@ -5,9 +5,15 @@ import (
 	"testing"
 )
 
-func TestLoggerInit(t testing.T) {
+func TestLoggerInit(t *testing.T) {
 	zl := logger.NewLogger()
 	if zl == nil {
+		t.Fail()
+	}
+
+	zlt := logger.NewLoggerWithTrace()
+
+	if zlt == nil {
 		t.Fail()
 	}
 
