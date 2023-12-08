@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"github.com/DeloitteOptimalReality/logxcept/internal/trace"
 	"github.com/DeloitteOptimalReality/logxcept/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -15,9 +14,7 @@ var (
 
 func ZapMiddlewareWithTrace() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
-		t := trace.RandStringBytes(16)
-		zapLog := logger.NewLoggerWithTrace(t)
+		zapLog, t := logger.NewLoggerWithTrace()
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)
 		ctx = context.WithValue(ctx, RequestLevelTrace, t)
 		c.Request = c.Request.WithContext(ctx)
@@ -28,7 +25,6 @@ func ZapMiddlewareWithTrace() gin.HandlerFunc {
 
 func ZapMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		zapLog := logger.NewLogger()
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)
 		c.Request = c.Request.WithContext(ctx)
