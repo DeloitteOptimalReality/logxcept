@@ -46,7 +46,11 @@ func TestDatabaseException(t *testing.T) {
 
 	if errors.As(dbe, &bePointer) {
 		t.Fail()
-		//error should appear as a baseException error
+		//error should not appear as a baseException error
+	}
+	if !errors.As(dbe.BaseException, &bePointer) {
+		t.Fail()
+		//error at the core should be a baseException error
 	}
 
 }

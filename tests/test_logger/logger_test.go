@@ -11,8 +11,11 @@ func TestLoggerInit(t *testing.T) {
 		t.Fail()
 	}
 
-	zlt := logger.NewLoggerWithTrace()
+	zlt, tr := logger.NewLoggerWithTrace()
 
+	if len(tr) != 16 {
+		t.Fail()
+	}
 	if zlt == nil {
 		t.Fail()
 	}

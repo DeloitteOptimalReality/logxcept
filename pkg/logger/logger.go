@@ -10,11 +10,11 @@ type ORLogger struct {
 	zap.Logger
 }
 
-func NewLoggerWithTrace() *zap.Logger {
+func NewLoggerWithTrace() (*zap.Logger, string) {
 	logger := NewLogger()
 	t := trace.RandStringBytes(16)
 	l := logger.With(zapcore.Field{Key: "requestTrace", Type: zapcore.StringType, String: t})
-	return l
+	return l, t
 }
 func NewLogger() *zap.Logger {
 	logger := zap.Must(zap.NewProduction())
