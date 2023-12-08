@@ -11,7 +11,7 @@ type DatabaseException struct {
 	*exception.BaseException
 }
 
-func NewDatabaseException(err error, msg string, path ast.Path, source string) *DatabaseException {
+func NewDatabaseException(err error, msg string, path ast.Path, source *string) *DatabaseException {
 	be := exception.NewBaseException(err, msg, path, source)
 	return &DatabaseException{be}
 }

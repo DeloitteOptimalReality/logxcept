@@ -29,11 +29,11 @@ type BaseException struct {
 	err     error
 	msg     string
 	path    ast.Path
-	source  string
+	source  *string
 	traceID string
 }
 
-func NewBaseException(err error, msg string, path ast.Path, source string) *BaseException {
+func NewBaseException(err error, msg string, path ast.Path, source *string) *BaseException {
 	return &BaseException{
 		err:     err,
 		msg:     msg,
@@ -60,7 +60,7 @@ func (be *BaseException) Path() ast.Path {
 }
 
 func (be *BaseException) Source() string {
-	return be.source
+	return *be.source
 }
 
 func (be *BaseException) Log(ctx context.Context) {
