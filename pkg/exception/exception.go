@@ -17,6 +17,7 @@ type Exception interface {
 	Msg() string
 	Path() ast.Path
 	Source() string
+	Code() *ErrorCode
 	Log(ctx context.Context)
 	GqlError() *gqlerror.Error
 	GqlErrorWithTrace(ctx context.Context) *gqlerror.Error
@@ -31,17 +32,17 @@ type BaseException struct {
 	path    ast.Path
 	source  *string
 	traceID string
-	code    ErrorCode
+	code    *ErrorCode
 }
 
-func NewBaseException(err error, msg string, path ast.Path, source *string, code *ErrorCode) *BaseException {
+func NewBaseException(err error, msg string, path ast.Path, code *ErrorCode, source *string) *BaseException {
 	return &BaseException{
 		err:     err,
 		msg:     msg,
 		path:    path,
 		source:  source,
 		traceID: trace.RandStringBytes(16),
-		code:    *code,
+		code:    code,
 	}
 }
 
@@ -64,6 +65,9 @@ func (be *BaseException) Path() ast.Path {
 func (be *BaseException) Source() string {
 	return *be.source
 }
+func (be *BaseException) Code() *ErrorCode {
+	return be.code
+}
 
 func (be *BaseException) Log(ctx context.Context) {
 
@@ -83,7 +87,8 @@ func (be *BaseException) Log(ctx context.Context) {
 		zap.String(resolverTraceIDField, resolverTrace),
 	}
 
-	logger.With(fields...).Info(fmt.Sprintf("%s: %s", be.Msg(), be.err.Error()))
+	logger.With(fields...).Info(fmt.Sprintf("%s: %s", be.code.Code(), be.code.Msg()))
+	logger.Error(fmt.Sprintf("%s: %s", be.Msg(), be.err.Error()), fields...)
 }
 
 func (be *BaseException) GqlError() *gqlerror.Error {

@@ -12,7 +12,12 @@ type DatabaseException struct {
 }
 
 func NewDatabaseException(err error, msg string, path ast.Path, source *string) *DatabaseException {
-	be := exception.NewBaseException(err, msg, path, source, &exception.E1002)
+	be := exception.NewBaseException(err, msg, path, &exception.E1003, source)
+	return &DatabaseException{be}
+}
+
+func NewDatabaseActionException(err error, msg string, path ast.Path, source *string) *DatabaseException {
+	be := exception.NewBaseException(err, msg, path, &exception.E1004, source)
 	return &DatabaseException{be}
 }
 
@@ -33,7 +38,11 @@ func (dbe *DatabaseException) Path() ast.Path {
 }
 
 func (dbe *DatabaseException) Source() string {
-	return dbe.BaseException.Error()
+	return dbe.BaseException.Source()
+}
+
+func (dbe *DatabaseException) Code() *exception.ErrorCode {
+	return dbe.BaseException.Code()
 }
 
 func (dbe *DatabaseException) Log(ctx context.Context) {

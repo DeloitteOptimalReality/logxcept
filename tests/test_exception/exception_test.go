@@ -8,7 +8,7 @@ import (
 )
 
 func TestBaseException(t *testing.T) {
-	be := exception.NewBaseException(nil, "", nil, nil)
+	be := exception.NewBaseException(nil, "", nil, nil, nil)
 
 	if be.Err() != nil {
 		t.Fail()
@@ -16,7 +16,7 @@ func TestBaseException(t *testing.T) {
 
 	e := errors.New("this is an example error that should")
 
-	be = exception.NewBaseException(e, "An error occurred in testing", nil, nil)
+	be = exception.NewBaseException(e, "An error occurred in testing", nil, nil, nil)
 
 	if be.Error() == be.Msg() {
 		t.Fail()
