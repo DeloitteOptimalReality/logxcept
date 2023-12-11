@@ -12,7 +12,7 @@ type DatabaseException struct {
 }
 
 func NewDatabaseException(err error, msg string, path ast.Path, source *string) *DatabaseException {
-	be := exception.NewBaseException(err, msg, path, source)
+	be := exception.NewBaseException(err, msg, path, source, &exception.E1002)
 	return &DatabaseException{be}
 }
 

@@ -31,15 +31,17 @@ type BaseException struct {
 	path    ast.Path
 	source  *string
 	traceID string
+	code    ErrorCode
 }
 
-func NewBaseException(err error, msg string, path ast.Path, source *string) *BaseException {
+func NewBaseException(err error, msg string, path ast.Path, source *string, code *ErrorCode) *BaseException {
 	return &BaseException{
 		err:     err,
 		msg:     msg,
 		path:    path,
 		source:  source,
 		traceID: trace.RandStringBytes(16),
+		code:    *code,
 	}
 }
 
