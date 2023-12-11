@@ -32,6 +32,18 @@ func TestDatabaseException(t *testing.T) {
 	if dbe.Err() != nil {
 		t.Fail()
 	}
+	code := dbe.Code()
+	if code.Code() != exception.E1003.Code() {
+		t.Fail()
+
+	}
+
+	dbe = impl.NewDatabaseActionException(nil, "test", nil, nil)
+	code = dbe.Code()
+	if code.Code() != exception.E1004.Code() {
+		t.Fail()
+
+	}
 
 	err := errors.New("database error that has occurred")
 
