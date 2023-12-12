@@ -12,7 +12,7 @@ var (
 	RequestLevelTrace = "requestTraceID"
 )
 
-func ZapMiddlewareWithTrace() gin.HandlerFunc {
+func GinZapMiddlewareWithTrace() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zapLog, t := logger.NewLoggerWithTrace()
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)
@@ -23,7 +23,7 @@ func ZapMiddlewareWithTrace() gin.HandlerFunc {
 	}
 }
 
-func ZapMiddleware() gin.HandlerFunc {
+func GinZapMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		zapLog := logger.NewLogger()
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)

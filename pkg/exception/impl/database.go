@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"github.com/DeloitteOptimalReality/logxcept/pkg/exception"
+	"github.com/DeloitteOptimalReality/logxcept/pkg/exception/code"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
@@ -12,7 +13,12 @@ type DatabaseException struct {
 }
 
 func NewDatabaseException(err error, msg string, path ast.Path, source *string) *DatabaseException {
-	be := exception.NewBaseException(err, msg, path, source)
+	be := exception.NewBaseException(err, msg, path, &code.E1003, source)
+	return &DatabaseException{be}
+}
+
+func NewDatabaseActionException(err error, msg string, path ast.Path, source *string) *DatabaseException {
+	be := exception.NewBaseException(err, msg, path, &code.E1004, source)
 	return &DatabaseException{be}
 }
 
@@ -33,7 +39,11 @@ func (dbe *DatabaseException) Path() ast.Path {
 }
 
 func (dbe *DatabaseException) Source() string {
-	return dbe.BaseException.Error()
+	return dbe.BaseException.Source()
+}
+
+func (dbe *DatabaseException) Code() *code.ErrorCode {
+	return dbe.BaseException.Code()
 }
 
 func (dbe *DatabaseException) Log(ctx context.Context) {
