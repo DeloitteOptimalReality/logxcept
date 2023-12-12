@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/DeloitteOptimalReality/logxcept/internal/trace"
+	"github.com/DeloitteOptimalReality/logxcept/pkg/exception/code"
 	"github.com/DeloitteOptimalReality/logxcept/pkg/logger/impl/middleware"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -17,7 +18,7 @@ type Exception interface {
 	Msg() string
 	Path() ast.Path
 	Source() string
-	Code() *ErrorCode
+	Code() *code.ErrorCode
 	Log(ctx context.Context)
 	GqlError() *gqlerror.Error
 	GqlErrorWithTrace(ctx context.Context) *gqlerror.Error
@@ -32,10 +33,10 @@ type BaseException struct {
 	path    ast.Path
 	source  *string
 	traceID string
-	code    *ErrorCode
+	code    *code.ErrorCode
 }
 
-func NewBaseException(err error, msg string, path ast.Path, code *ErrorCode, source *string) *BaseException {
+func NewBaseException(err error, msg string, path ast.Path, code *code.ErrorCode, source *string) *BaseException {
 	return &BaseException{
 		err:     err,
 		msg:     msg,
@@ -65,7 +66,7 @@ func (be *BaseException) Path() ast.Path {
 func (be *BaseException) Source() string {
 	return *be.source
 }
-func (be *BaseException) Code() *ErrorCode {
+func (be *BaseException) Code() *code.ErrorCode {
 	return be.code
 }
 
