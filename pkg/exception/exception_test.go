@@ -2,6 +2,7 @@ package exception
 
 import (
 	"errors"
+	"github.com/DeloitteOptimalReality/logxcept/pkg/exception/code"
 	"github.com/DeloitteOptimalReality/logxcept/pkg/exception/impl"
 	"testing"
 )
@@ -31,15 +32,15 @@ func TestDatabaseException(t *testing.T) {
 	if dbe.Err() != nil {
 		t.Fail()
 	}
-	code := dbe.Code()
-	if code.Code() != E1003.Code() {
+	c := dbe.Code()
+	if c.Code() != code.E1003.Code() {
 		t.Fail()
 
 	}
 
 	dbe = impl.NewDatabaseActionException(nil, "test", nil, nil)
-	code = dbe.Code()
-	if code.Code() != E1004.Code() {
+	c = dbe.Code()
+	if c.Code() != code.E1004.Code() {
 		t.Fail()
 
 	}
