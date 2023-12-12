@@ -1,6 +1,6 @@
-package exception
+package code
 
-// codes for exceptions
+// code for exceptions
 
 type ErrorCode struct {
 	code    string

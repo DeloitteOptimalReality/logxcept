@@ -1,17 +1,16 @@
-package test_logger
+package logger
 
 import (
-	"github.com/DeloitteOptimalReality/logxcept/pkg/logger"
 	"testing"
 )
 
 func TestLoggerInit(t *testing.T) {
-	zl := logger.NewLogger()
+	zl := NewLogger()
 	if zl == nil {
 		t.Fail()
 	}
 
-	zlt, tr := logger.NewLoggerWithTrace()
+	zlt, tr := NewLoggerWithTrace()
 
 	if len(tr) != 16 {
 		t.Fail()

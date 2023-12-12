@@ -1,14 +1,13 @@
-package test_exception
+package exception
 
 import (
 	"errors"
-	"github.com/DeloitteOptimalReality/logxcept/pkg/exception"
 	"github.com/DeloitteOptimalReality/logxcept/pkg/exception/impl"
 	"testing"
 )
 
 func TestBaseException(t *testing.T) {
-	be := exception.NewBaseException(nil, "", nil, nil, nil)
+	be := NewBaseException(nil, "", nil, nil, nil)
 
 	if be.Err() != nil {
 		t.Fail()
@@ -16,7 +15,7 @@ func TestBaseException(t *testing.T) {
 
 	e := errors.New("this is an example error that should")
 
-	be = exception.NewBaseException(e, "An error occurred in testing", nil, nil, nil)
+	be = NewBaseException(e, "An error occurred in testing", nil, nil, nil)
 
 	if be.Error() == be.Msg() {
 		t.Fail()
@@ -33,14 +32,14 @@ func TestDatabaseException(t *testing.T) {
 		t.Fail()
 	}
 	code := dbe.Code()
-	if code.Code() != exception.E1003.Code() {
+	if code.Code() != E1003.Code() {
 		t.Fail()
 
 	}
 
 	dbe = impl.NewDatabaseActionException(nil, "test", nil, nil)
 	code = dbe.Code()
-	if code.Code() != exception.E1004.Code() {
+	if code.Code() != E1004.Code() {
 		t.Fail()
 
 	}
@@ -54,7 +53,7 @@ func TestDatabaseException(t *testing.T) {
 		//error should appear as a database error
 	}
 
-	var bePointer *exception.BaseException
+	var bePointer *BaseException
 
 	if errors.As(dbe, &bePointer) {
 		t.Fail()
