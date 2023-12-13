@@ -100,7 +100,8 @@ func (be *BaseException) GqlError() *gqlerror.Error {
 		Path:      be.path,
 		Locations: nil,
 		Extensions: map[string]interface{}{
-			traceIDField: be.traceID,
+			be.code.Code(): be.code.Msg(),
+			traceIDField:   be.traceID,
 		},
 		Rule: "",
 	}
@@ -114,6 +115,7 @@ func (be *BaseException) GqlErrorWithTrace(ctx context.Context) *gqlerror.Error 
 		Path:      be.path,
 		Locations: nil,
 		Extensions: map[string]interface{}{
+			be.code.Code():       be.code.Msg(),
 			traceIDField:         be.traceID,
 			resolverTraceIDField: traceFromCtx(ctx),
 		},
