@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sync"
 	"testing"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestGinZapMiddleware(t *testing.T) {
-	a := GinZapMiddleware()
+	a := GinZapMiddleware(nil)
 
 	if a == nil {
 		t.Fail()
@@ -33,7 +33,7 @@ func testTraceHandler(t *testing.T) gin.HandlerFunc {
 func TestGinZapMiddlewareWithTrace(t *testing.T) {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	a := GinZapMiddlewareWithTrace()
+	a := GinZapMiddlewareWithTrace(nil)
 	if a == nil {
 		t.Fail()
 	}
@@ -65,14 +65,19 @@ func queryTestServer(t *testing.T) bool {
 		t.Error(e)
 		return false
 	}
-	defer a.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(a.Body)
 
 	if a.StatusCode != http.StatusOK {
 		t.Errorf("error getting correct status code for query")
 		return false
 	}
 
-	body, err := ioutil.ReadAll(a.Body)
+	body, err := io.ReadAll(a.Body)
 	if err != nil {
 		t.Error(err)
 		return false

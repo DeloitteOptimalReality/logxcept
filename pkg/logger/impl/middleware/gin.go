@@ -12,9 +12,9 @@ var (
 	RequestLevelTrace = "requestTraceID"
 )
 
-func GinZapMiddlewareWithTrace() gin.HandlerFunc {
+func GinZapMiddlewareWithTrace(level *string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		zapLog, t := logger.NewLoggerWithTrace()
+		zapLog, t := logger.NewLoggerWithTrace(level)
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)
 		ctx = context.WithValue(ctx, RequestLevelTrace, t)
 		c.Request = c.Request.WithContext(ctx)
@@ -23,9 +23,9 @@ func GinZapMiddlewareWithTrace() gin.HandlerFunc {
 	}
 }
 
-func GinZapMiddleware() gin.HandlerFunc {
+func GinZapMiddleware(level *string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		zapLog := logger.NewLogger()
+		zapLog := logger.NewLogger(level)
 		ctx := context.WithValue(c.Request.Context(), CtxLoggerKey, zapLog)
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()

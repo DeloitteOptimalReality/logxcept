@@ -90,7 +90,9 @@ func (be *BaseException) Log(ctx context.Context) {
 	}
 
 	logger.With(fields...).Info(fmt.Sprintf("%s: %s", be.code.Code(), be.code.Msg()))
-	logger.Error(fmt.Sprintf("%s: %s", be.Msg(), be.err.Error()), fields...)
+	if logger.Level().String() != "info" {
+		logger.Error(fmt.Sprintf("%s: %s", be.Msg(), be.err.Error()), fields...)
+	}
 }
 
 func (be *BaseException) GqlError() *gqlerror.Error {
