@@ -86,6 +86,7 @@ func (be *BaseException) Log(ctx context.Context) {
 	fields := []zapcore.Field{
 		zap.String(traceIDField, be.traceID),
 		zap.String(resolverTraceIDField, resolverTrace),
+		zap.String(be.Code().Code(), be.Code().Msg()),
 	}
 
 	logger.With(fields...).Info(fmt.Sprintf("%s: %s", be.code.Code(), be.code.Msg()))
