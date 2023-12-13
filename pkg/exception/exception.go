@@ -74,7 +74,7 @@ func (be *BaseException) Log(ctx context.Context) {
 
 	var logger *zap.Logger
 
-	l := ctx.Value("logger")
+	l := ctx.Value(middleware.CtxLoggerKey)
 	if l == nil {
 		return
 	}
